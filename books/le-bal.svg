@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 200" preserveAspectRatio="xMidYMid slice">
+ <rect width="420" height="200" fill="#1d1d1f"/>
+ <!-- moon -->
+ <circle cx="352" cy="40" r="13" fill="none" stroke="#f2f0eb" stroke-width="1.4"/>
+ <circle cx="357" cy="36" r="11" fill="#1d1d1f"/>
+ <!-- far bank: rooftops -->
+ <path d="M0 96 L28 96 L28 82 L44 74 L60 82 L60 96 L84 96 L84 70 L104 70 L104 96 L330 96 L330 78 L346 78 L346 66 L352 60 L358 66 L358 78 L372 78 L372 96 L420 96" fill="none" stroke="#f2f0eb" stroke-width="1" opacity=".45"/>
+ <!-- bridge deck and arches -->
+ <path d="M40 104 H380" stroke="#f2f0eb" stroke-width="1.8"/>
+ <path d="M40 112 H380" stroke="#f2f0eb" stroke-width=".8" opacity=".6"/>
+ <g fill="none" stroke="#f2f0eb" stroke-width="1.6">
+  <path d="M52 150 Q 106 104 160 150"/><path d="M160 150 Q 214 104 268 150"/><path d="M268 150 Q 322 104 376 150"/>
+ </g>
+ <g stroke="#f2f0eb" stroke-width="1.6"><path d="M52 112V150M160 112V150M268 112V150M376 112V150"/></g>
+ <!-- lamp posts -->
+ <g stroke="#f2f0eb" stroke-width="1.2" fill="#f2f0eb"><path d="M120 104V84M300 104V84"/><circle cx="120" cy="82" r="2.4"/><circle cx="300" cy="82" r="2.4"/></g>
+ <!-- the girl -->
+ <g fill="#f2f0eb"><circle cx="214" cy="80" r="3.6"/><path d="M210 85 L218 85 L221 103 L207 103 Z"/></g>
+ <!-- water -->
+ <g stroke="#f2f0eb" stroke-width=".8" opacity=".35" fill="none">
+  <path d="M0 162 C 40 158 80 166 120 162 S 200 158 240 162 S 330 166 420 160"/><path d="M0 178 C 50 174 90 182 140 178 S 240 174 290 178 S 370 182 420 176"/><path d="M0 193 C 60 189 120 196 180 192 S 300 188 420 192"/>
+ </g>
+ <!-- falling envelopes -->
+ <g fill="#f2f0eb">
+  <rect x="222" y="118" width="7" height="5" transform="rotate(20 225 120)"/><rect x="236" y="134" width="7" height="5" transform="rotate(-25 239 136)"/>
+  <rect x="210" y="146" width="7" height="5" transform="rotate(40 213 148)"/><rect x="246" y="160" width="7" height="5" transform="rotate(10 249 162)" opacity=".7"/>
+  <rect x="198" y="170" width="7" height="5" transform="rotate(-15 201 172)" opacity=".6"/><rect x="262" y="182" width="7" height="5" transform="rotate(30 265 184)" opacity=".45"/>
+ </g>
+ <rect x="228" y="150" width="8" height="5.6" fill="#ff6a52" transform="rotate(-18 232 153)"/>
+</svg>

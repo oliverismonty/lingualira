@@ -63,6 +63,10 @@ def build(slug):
         book.append({'fr': ch['fr'], 'en': ch['en'], 'p': paras})
     if missing:
         sys.exit(f'{slug}: missing from dict.txt: {" ".join(sorted(missing))}')
+    toks = [[x[0].lower() for x in se[0] if isinstance(x, list)] for ch in book for p in ch['p'] for se in p]
+    for p, _ in phr:
+        if not any(t[i:i + len(p)] == p for t in toks for i in range(len(t))):
+            print(f'{slug}: warning, phrase never appears in the text: {" ".join(p)}')
 
     data = {'slug': slug, **meta, 'words': words, 'chapters': len(book),
             'book': book, 'dict': {k: D[k] for k in sorted(used)}, 'phrases': phr}
