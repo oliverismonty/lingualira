@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 200" preserveAspectRatio="xMidYMid slice">
+ <rect width="420" height="200" fill="#1d1d1f"/>
+ <!-- open jewellery box -->
+ <g fill="none" stroke="#f2f0eb" stroke-width="1.6" stroke-linejoin="round">
+  <path d="M120 150 H300 V176 H120 Z"/>
+  <path d="M120 150 L140 96 H280 L300 150"/>
+  <path d="M132 150 C 170 160 250 160 288 150" stroke-width=".8" opacity=".5"/>
+ </g>
+ <!-- the necklace: a string of diamonds -->
+ <path d="M150 112 C 170 158 250 158 270 112" fill="none" stroke="#f2f0eb" stroke-width=".8" opacity=".6"/>
+ <g fill="none" stroke="#f2f0eb" stroke-width="1.2">
+  <path d="M154 122 l5 -6 l5 6 l-5 7 z"/><path d="M166 134 l5 -6 l5 6 l-5 7 z"/><path d="M180 142 l5 -6 l5 6 l-5 7 z"/><path d="M196 146 l5 -6 l5 6 l-5 7 z"/>
+  <path d="M220 146 l5 -6 l5 6 l-5 7 z"/><path d="M236 142 l5 -6 l5 6 l-5 7 z"/><path d="M250 134 l5 -6 l5 6 l-5 7 z"/><path d="M262 122 l5 -6 l5 6 l-5 7 z"/>
+ </g>
+ <path d="M204 148 l6 -8 l6 8 l-6 10 z" fill="#ff6a52"/>
+ <!-- sparkles -->
+ <g stroke="#f2f0eb" stroke-width="1" opacity=".7"><path d="M98 70 v12M92 76 h12"/><path d="M322 58 v10M317 63 h10"/><path d="M350 112 v8M346 116 h8"/><path d="M72 128 v8M68 132 h8"/></g>
+ <!-- chandelier, the ball -->
+ <g fill="none" stroke="#f2f0eb" stroke-width="1.2" opacity=".55">
+  <path d="M210 0 V30"/><path d="M180 44 C 190 56 230 56 240 44"/><path d="M210 30 V50"/>
+  <circle cx="180" cy="42" r="2.5"/><circle cx="210" cy="52" r="2.5"/><circle cx="240" cy="42" r="2.5"/>
+ </g>
+</svg>
