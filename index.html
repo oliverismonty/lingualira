@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bibliothèque">
+<meta name="theme-color" content="#1b2577">
+<title>Ma bibliothèque française</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;0,7..72,800;1,7..72,400;1,7..72,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="band">
+  <div class="top" style="grid-template-columns:1fr">
+    <div>
+      <h1>Ma bibliothèque</h1>
+      <p class="sub">Short classics retold in simpler French. Tap any word for its meaning.</p>
+    </div>
+  </div>
+</header>
+<main>
+  <div class="shelf" id="shelf"></div>
+</main>
+<script>
+{
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const get=(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}};
+fetch('books/index.json').then(r=>r.json()).then(books=>{
+  document.getElementById('shelf').innerHTML=books.map(b=>{
+    const done=Object.keys(get(b.slug+'-done',{})).length,pct=Math.round(done/b.chapters*100);
+    const mins=Math.round(b.words/55/5)*5;
+    return `<a class="book" href="reader.html?b=${encodeURIComponent(b.slug)}" style="--c:${esc(b.colour)}">
+      <div class="cv"><img src="books/${encodeURIComponent(b.slug)}.svg" alt=""></div>
+      <div class="bd"><h3>${esc(b.title)}</h3><p class="au">${esc(b.author)}, ${esc(b.year)}</p>
+      <p class="bl">${esc(b.blurb)}</p>
+      <div class="tags"><span>${esc(b.level)}</span><span>${b.chapters} chapitres</span><span>~${mins} min</span>${done?`<span>${done===b.chapters?'✓ Lu':pct+'% lu'}</span>`:''}</div>
+      ${done?`<div class="bar"><i style="width:${pct}%"></i></div>`:''}</div></a>`;
+  }).join('');
+}).catch(()=>{document.getElementById('shelf').innerHTML='<p class="err">The book list could not be loaded. Check your connection and try again.</p>'});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>
