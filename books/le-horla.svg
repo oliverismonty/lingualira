@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 200" preserveAspectRatio="xMidYMid slice">
+ <rect width="420" height="200" fill="#1d1d1f"/>
+ <!-- mirrored wardrobe, empty reflection -->
+ <g fill="none" stroke="#f2f0eb" stroke-width="1.6">
+  <path d="M250 22 H350 V188 H250 Z"/>
+  <path d="M262 34 H338 V176 H262 Z" stroke-width="1"/>
+ </g>
+ <g stroke="#f2f0eb" stroke-width=".8" opacity=".25"><path d="M272 60 L300 40M276 90 L328 50M282 130 L334 92M300 160 L336 134"/></g>
+ <!-- the water jug, empty -->
+ <g fill="none" stroke="#f2f0eb" stroke-width="1.6" stroke-linejoin="round">
+  <path d="M120 70 H136 V80 C 160 92 164 150 150 172 H106 C 92 150 96 92 120 80 Z"/>
+  <path d="M114 66 H142"/>
+  <path d="M106 172 H150" stroke-width="1"/>
+ </g>
+ <path d="M104 160 C 120 156 136 156 152 160" stroke="#f2f0eb" stroke-width=".8" opacity=".35" fill="none"/>
+ <!-- the rose, hanging in the air -->
+ <g transform="translate(200 78)">
+  <path d="M0 0 C -6 -10 6 -14 8 -6 C 14 -10 16 2 8 4 C 6 10 -4 10 -4 4 C -12 4 -10 -6 0 0 Z" fill="#ff6a52"/>
+  <path d="M2 6 C 4 20 0 30 -6 42" fill="none" stroke="#f2f0eb" stroke-width="1.2"/>
+  <path d="M-2 22 C -10 18 -14 22 -14 26 C -8 28 -4 26 -2 22 Z" fill="none" stroke="#f2f0eb" stroke-width="1"/>
+ </g>
+ <!-- candle -->
+ <g fill="none" stroke="#f2f0eb" stroke-width="1.2" opacity=".7"><path d="M54 172 V140 H64 V172"/><path d="M59 140 C 56 134 58 128 59 126 C 61 130 63 134 59 140 Z" fill="#f2f0eb" stroke="none"/></g>
+ <path d="M30 176 H390" stroke="#f2f0eb" stroke-width="1" opacity=".5"/>
+</svg>
