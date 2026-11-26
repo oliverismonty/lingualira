@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 200" preserveAspectRatio="xMidYMid slice">
+ <rect width="420" height="200" fill="#1d1d1f"/>
+ <g fill="#f2f0eb" opacity=".5"><circle cx="30" cy="26" r="1"/><circle cx="96" cy="44" r="1"/><circle cx="170" cy="20" r="1"/><circle cx="252" cy="36" r="1"/><circle cx="404" cy="30" r="1"/><circle cx="388" cy="84" r="1"/></g>
+ <!-- lightning (the telegram's storm) -->
+ <path d="M348 18 L336 46 L346 46 L332 76" fill="none" stroke="#f2f0eb" stroke-width="1.4" stroke-linejoin="round" opacity=".7"/>
+ <!-- wireless waves from the mast -->
+ <g fill="none" stroke="#f2f0eb" stroke-width="1" opacity=".55"><path d="M206 40a10 10 0 0 1 0 14M212 34a18 18 0 0 1 0 26M218 28a26 26 0 0 1 0 38"/><path d="M190 40a10 10 0 0 0 0 14M184 34a18 18 0 0 0 0 26M178 28a26 26 0 0 0 0 38"/></g>
+ <!-- liner -->
+ <g fill="none" stroke="#f2f0eb" stroke-width="1.6" stroke-linejoin="round">
+  <path d="M60 128 L360 128 L338 156 L84 156 Z"/>
+  <path d="M110 128 V112 H300 V128"/><path d="M140 112 V100 H270 V112"/>
+  <path d="M198 100 V47"/>
+ </g>
+ <g fill="#f2f0eb"><rect x="160" y="78" width="16" height="22"/><rect x="190" y="78" width="16" height="22" opacity="0"/><rect x="226" y="78" width="16" height="22"/></g>
+ <g fill="#f2f0eb" opacity=".8"><circle cx="130" cy="120" r="2"/><circle cx="150" cy="120" r="2"/><circle cx="170" cy="120" r="2"/><circle cx="190" cy="120" r="2"/><circle cx="210" cy="120" r="2"/><circle cx="230" cy="120" r="2"/><circle cx="250" cy="120" r="2"/><circle cx="270" cy="120" r="2"/></g>
+ <!-- top hat and monocle, the gentleman-thief -->
+ <g transform="translate(62 44)" fill="none" stroke="#f2f0eb" stroke-width="1.6">
+  <path d="M0 30 H44"/><path d="M8 30 V4 H36 V30"/><path d="M8 24 H36" stroke="#ff6a52" stroke-width="3"/>
+  <circle cx="30" cy="44" r="7"/><path d="M30 51 C 30 58 26 62 22 66" stroke-width="1"/>
+ </g>
+ <!-- sea -->
+ <g stroke="#f2f0eb" stroke-width=".8" opacity=".35" fill="none">
+  <path d="M0 166 C 40 162 80 170 120 166 S 200 162 240 166 S 330 170 420 164"/><path d="M0 182 C 50 178 90 186 140 182 S 240 178 290 182 S 370 186 420 180"/>
+ </g>
+</svg>
