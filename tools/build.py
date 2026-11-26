@@ -79,11 +79,11 @@ def main():
 
     # bump the offline cache whenever anything changes, and list every book file in it
     h = hashlib.sha1()
-    files = ['index.html', 'reader.html', 'style.css', 'manifest.webmanifest', 'icon-180.png', 'icon-192.png', 'icon-512.png', 'books/index.json']
+    files = ['index.html', 'reader.html', 'style.css', 'manifest.webmanifest', 'icon-180.png?v=2', 'icon-192.png?v=2', 'icon-512.png?v=2', 'books/index.json']
     for b in books:
         files += [f"books/{b['slug']}.json", f"books/{b['slug']}.svg"]
     for f in files:
-        h.update(open(os.path.join(ROOT, f), 'rb').read())
+        h.update(open(os.path.join(ROOT, f.split('?')[0]), 'rb').read())
     sw = open(os.path.join(ROOT, 'tools', 'sw.template.js'), encoding='utf-8').read()
     sw = sw.replace('__VERSION__', h.hexdigest()[:10]).replace('__FILES__', json.dumps(['./'] + ['./' + f for f in files]))
     open(os.path.join(ROOT, 'sw.js'), 'w', encoding='utf-8').write(sw)

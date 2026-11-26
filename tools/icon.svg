@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+ <defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2a2d"/><stop offset="1" stop-color="#161618"/></linearGradient>
+  <linearGradient id="iv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbf8f1"/><stop offset="1" stop-color="#e4ddcf"/></linearGradient>
+ </defs>
+ <rect width="1024" height="1024" fill="url(#bg)"/>
+ <g fill="none" stroke="url(#iv)" stroke-linecap="round" stroke-linejoin="round">
+  <!-- arms of the lyre -->
+  <path d="M512 742 C 380 742 318 650 330 540 C 340 450 300 380 250 318 C 236 300 238 272 262 262" stroke-width="42"/>
+  <path d="M512 742 C 644 742 706 650 694 540 C 684 450 724 380 774 318 C 788 300 786 272 762 262" stroke-width="42"/>
+  <!-- crossbar -->
+  <path d="M300 352 C 420 326 604 326 724 352" stroke-width="34"/>
+  <!-- strings -->
+  <g stroke-width="11" opacity=".9">
+   <path d="M444 344 L 452 718"/><path d="M490 338 L 494 738"/><path d="M534 338 L 530 738"/><path d="M580 344 L 572 718"/>
+  </g>
+ </g>
+ <!-- dashed 'tap a word' underline -->
+ <g fill="#ff6a52">
+  <rect x="328" y="812" width="92" height="22" rx="11"/><rect x="466" y="812" width="92" height="22" rx="11"/><rect x="604" y="812" width="92" height="22" rx="11"/>
+ </g>
+</svg>
