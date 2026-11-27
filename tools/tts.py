@@ -12,15 +12,15 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 KEY = os.environ.get('GEMINI_API_KEY', '').strip()
 VOICE = os.environ.get('TTS_VOICE', 'Iapetus')
 MODELS = [m.strip() for m in os.environ.get('TTS_MODELS', 'gemini-3.8-flash-tts').split(',') if m.strip()]
+LANG = os.environ.get('TTS_LANG', 'fr-FR')
 PAUSE = float(os.environ.get('TTS_PAUSE', '6'))  # seconds between calls, to stay under free-tier rate limits
 
 SENTENCE_PROMPT = ("Read the following French text aloud in a clear, natural voice with a standard "
                    "France French accent, at a slightly slow pace for a language learner. "
                    "Read only the text:\n\n{t}")
 # Gemini 3.8 TTS reads its text verbatim, so delivery notes go in speech_metadata.style instead
-SENTENCE_STYLE = ("natural, expressive storytelling at a normal pace, like an audiobook narrator "
-                  "reading a French novel aloud, with the rhythm and emotion of the scene")
-WORD_STYLE = "clear and careful, like a dictionary pronunciation of one word"
+SENTENCE_STYLE = "steady audiobook narration"
+WORD_STYLE = "clear and careful, like a dictionary pronunciation of one word, spoken in French"
 WORD_PROMPT = ("Say this single French word clearly, with a standard France French accent, "
                "as a dictionary would. Say only the word:\n\n{t}")
 
@@ -47,8 +47,11 @@ def request_body(model, text, kind):
     else:
         part = {'text': (SENTENCE_PROMPT if kind == 'sentence' else WORD_PROMPT).format(t=text)}
         voice = {'prebuiltVoiceConfig': {'voiceName': VOICE}}
+    speech = {'voiceConfig': voice}
+    if LANG:
+        speech['languageCode'] = LANG  # stops short words like "destin" being read as English
     return {'contents': [{'role': 'user', 'parts': [part]}],
-            'generationConfig': {'responseModalities': ['AUDIO'], 'speechConfig': {'voiceConfig': voice}}}
+            'generationConfig': {'responseModalities': ['AUDIO'], 'speechConfig': speech}}
 
 
 def synth(model, text, kind):
@@ -63,6 +66,12 @@ def synth(model, text, kind):
             return base64.b64decode(part['data']), part.get('mimeType', '')
         except urllib.error.HTTPError as e:
             msg = e.read().decode(errors='replace')[:300]
+            global LANG
+            if e.code == 400 and LANG and 'language' in msg.lower():
+                print(f'  model rejected languageCode {LANG}, retrying without it', flush=True)
+                LANG = ''
+                body = json.dumps(request_body(model, text, kind)).encode()
+                continue
             if e.code in (429, 500, 503) and attempt < 4:
                 wait = 20 * (attempt + 1)
                 print(f'  {e.code}, retrying in {wait}s: {msg}', flush=True)
