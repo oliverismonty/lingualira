@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 200" preserveAspectRatio="xMidYMid slice">
+ <rect width="420" height="200" fill="#1d1d1f"/>
+ <!-- mountains beyond the lake -->
+ <path d="M0 104 L50 70 L84 90 L132 48 L176 86 L214 64 L262 96 L300 60 L348 92 L392 74 L420 88" fill="none" stroke="#f2f0eb" stroke-width="1.2" opacity=".55"/>
+ <!-- the island with trees -->
+ <path d="M240 112 C 260 100 330 100 350 112 Z" fill="none" stroke="#f2f0eb" stroke-width="1.2"/>
+ <g fill="none" stroke="#f2f0eb" stroke-width="1"><path d="M262 108 V96M262 96 l-6 8M262 96 l6 8M262 90 l-5 7M262 90 l5 7"/><path d="M288 106 V94M288 94 l-6 8M288 94 l6 8M288 88 l-5 7M288 88 l5 7"/><path d="M318 108 C 318 96 330 96 330 108"/></g>
+ <!-- water lines -->
+ <g stroke="#f2f0eb" stroke-width=".8" opacity=".4" fill="none">
+  <path d="M0 122 H180M210 128 H420M30 140 H240M260 148 H400M0 162 H150M190 170 H380M60 186 H300"/>
+ </g>
+ <!-- the drifting boat with a figure lying in it -->
+ <g transform="translate(112 152)" fill="none" stroke="#f2f0eb" stroke-width="1.5" stroke-linejoin="round">
+  <path d="M-40 0 H40 C 34 10 -34 10 -40 0 Z" fill="#1d1d1f"/>
+  <circle cx="-22" cy="-4" r="3.6" fill="#f2f0eb" stroke="none"/>
+  <path d="M-18 -3 H24" stroke-width="2.4"/>
+ </g>
+ <!-- one red flower -->
+ <path d="M340 108 V96" stroke="#f2f0eb" stroke-width="1"/><circle cx="340" cy="93" r="3.6" fill="#ff6a52"/>
+</svg>
