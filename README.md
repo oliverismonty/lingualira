@@ -30,3 +30,16 @@ Progress (by sentence) and saved words are kept per book in the browser on your 
 3. Commit and push. The book appears in the library within a minute or two.
 
 Copy `books-src/micromegas/` as a starting point.
+
+## Audio
+
+Recorded with Gemini 3.8 Flash TTS (voice Iapetus) by the **Book audio** GitHub Action
+(Actions tab → Book audio → Run workflow → choose the book). It needs the repository secret
+`GEMINI_API_KEY`. `tools/tts.py` records each chapter as one narration (so the voice flows from
+sentence to sentence) and finds every sentence's start and end in it; single words are recorded
+25 at a time as a spoken list and cut apart at the pauses. Runs are resumable and stop cleanly
+at the daily quota (resets 08:00 UK time).
+
+In the reader, ▶ plays the book from the current page, highlighting the sentence and the word
+being read and turning pages; tapping a word pauses it. Anything not recorded uses the
+phone's own French voice.
