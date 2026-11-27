@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="LinguaLira">
+<meta name="theme-color" content="#fbfaf6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1d1d1f" media="(prefers-color-scheme: dark)">
+<title>Mes mots · LinguaLira</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png?v=2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;0,7..72,800;1,7..72,400;1,7..72,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.tools{position:sticky;top:0;z-index:5;background:var(--bg);padding:12px 0 14px;border-bottom:1px solid var(--line);display:grid;gap:12px}
+.opts{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;font:15px system-ui,-apple-system,sans-serif}
+.seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{border:0;background:transparent;min-height:40px;padding:0 14px;font:15px system-ui,-apple-system,sans-serif;color:var(--ink)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed=true]{background:var(--btn);color:var(--btnink)}
+.chk{display:flex;align-items:center;gap:10px;min-height:40px}
+.chk .sw{flex:none}
+.copy{background:var(--btn);color:var(--btnink);border:0;border-radius:14px;min-height:52px;font:600 17px system-ui,-apple-system,sans-serif;width:100%}
+.copy.done{background:var(--acc);color:#fff}
+.hint2{font:13px/1.45 system-ui,-apple-system,sans-serif;color:var(--mute);margin:0}
+.grp h2{font-size:22px;font-style:italic;font-weight:800;margin:26px 0 4px}
+.grp h2 small{font:14px system-ui,-apple-system,sans-serif;font-style:normal;font-weight:400;color:var(--mute);margin-left:6px}
+.wl{list-style:none;padding:0;margin:0}
+.wl li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;border-top:1px solid var(--line);padding:14px 0}
+.wl .fr{font-size:21px;font-weight:600}
+.wl .en{font-size:16px;margin-top:2px}
+.wl .nt{font:13px system-ui,-apple-system,sans-serif;color:var(--mute);margin-top:2px}
+.wl .ex{font-size:15px;font-style:italic;color:var(--mute);margin-top:6px}
+.wl .ex b{font-weight:600;color:var(--ink);font-style:normal}
+.wl .x{align-self:start}
+.none{padding:30px 0;color:var(--mute)}
+.fallback{width:100%;min-height:140px;font:13px ui-monospace,monospace;border:1px solid var(--line);border-radius:10px;background:var(--soft);color:var(--ink);padding:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar"><a class="back" href="./">← Bibliothèque</a></div>
+  <section class="hero"><h1>Mes mots</h1><p id="sub">Every word you've saved, from every book.</p></section>
+  <div class="tools" id="tools" hidden>
+    <div class="opts">
+      <div class="seg" role="group" aria-label="Format">
+        <button data-fmt="tab" aria-pressed="true">Anki / Quizlet</button><button data-fmt="csv" aria-pressed="false">CSV</button>
+      </div>
+      <label class="chk"><button class="sw" id="ex" role="switch" aria-checked="true" aria-label="Include the sentence"><i></i></button>Include the sentence</label>
+    </div>
+    <button class="copy" id="copy">Copy all words</button>
+    <p class="hint2" id="fmthint"></p>
+  </div>
+  <div id="out"></div>
+</div>
+<script>
+{
+['gesturestart','gesturechange','gestureend'].forEach(t=>document.addEventListener(t,e=>e.preventDefault(),{passive:false}));
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const get=(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}};
+const put=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+let fmt=get('ll-cards-fmt','tab'),withEx=get('ll-cards-ex',true),GROUPS=[];
+const HINTS={tab:'One card per line: French, a tab, then English. Anki: File → Import. Quizlet: Import → paste, with "Tab" between term and definition and "New line" between cards.',
+             csv:'Comma-separated with quotes, for spreadsheets and apps that import CSV.'};
+const plain=segs=>segs.map(x=>Array.isArray(x)?x[0]:x).join('').trim();
+
+function load(){
+  return fetch('books/index.json').then(r=>r.json()).then(books=>Promise.all(books.map(b=>{
+    const saved=get(b.slug+'-saved',{});const keys=Object.keys(saved);
+    if(!keys.length)return null;
+    return fetch('books/'+encodeURIComponent(b.slug)+'.json').then(r=>r.json()).then(d=>{
+      const ctx=get(b.slug+'-savedctx',{});
+      return {slug:b.slug,title:b.title,words:keys.map(k=>{
+        const g=d.dict[k]||['',''];let ex='';
+        const id=ctx[k];if(id){const [c,pi,si]=id.split('-').map(Number);const s=d.book[c]&&d.book[c].p[pi]&&d.book[c].p[pi][si];if(s)ex=plain(s[0])}
+        return {k,fr:saved[k],en:g[0],note:g[1],ex};
+      })};
+    }).catch(()=>null);
+  }))).then(gs=>GROUPS=gs.filter(Boolean));
+}
+function cards(){ // one entry per word, first book wins if saved in several
+  const seen=new Set(),out=[];
+  for(const g of GROUPS)for(const w of g.words){if(seen.has(w.k))continue;seen.add(w.k);out.push(w)}
+  return out;
+}
+function text(){
+  const cs=cards();
+  const back=w=>{let s=w.en;if(w.note)s+=` (${w.note})`;return s};
+  if(fmt==='csv'){
+    const q=v=>'"'+String(v).replace(/"/g,'""')+'"';
+    return ['French,English'+(withEx?',Sentence':''),...cs.map(w=>[w.fr,back(w),...(withEx?[w.ex]:[])].map(q).join(','))].join('\n');
+  }
+  const clean=v=>String(v).replace(/[\t\n]+/g,' ');
+  return cs.map(w=>clean(w.fr)+'\t'+clean(back(w))+(withEx&&w.ex?' — '+clean(w.ex):'')).join('\n');
+}
+function render(){
+  const n=cards().length;
+  $('#sub').textContent=n?`${n} word${n>1?'s':''} saved across your books. Copy them all to make flashcards.`:"Every word you've saved, from every book.";
+  $('#tools').hidden=!n;
+  document.querySelectorAll('[data-fmt]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.fmt===fmt?'true':'false'));
+  $('#ex').setAttribute('aria-checked',withEx?'true':'false');
+  $('#fmthint').textContent=HINTS[fmt];
+  $('#out').innerHTML=n?GROUPS.map(g=>`<section class="grp"><h2>${esc(g.title)}<small>${g.words.length}</small></h2><ul class="wl">${g.words.map(w=>{
+      const ex=w.ex?esc(w.ex).replace(new RegExp('('+w.fr.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','i'),'<b>$1</b>'):'';
+      return `<li><div><div class="fr">${esc(w.fr)}</div><div class="en">${esc(w.en)}</div>${w.note?`<div class="nt">${esc(w.note)}</div>`:''}${ex?`<div class="ex">${ex}</div>`:''}</div><button class="x" data-rm="${esc(g.slug)}|${esc(w.k)}" aria-label="Retirer">−</button></li>`}).join('')}</ul></section>`).join('')
+    :'<p class="none">No saved words yet. While reading, tap a word and press <b>Save</b>; it will appear here.</p>';
+}
+async function copy(){
+  const t=text(),b=$('#copy');
+  let ok=false;
+  try{await navigator.clipboard.writeText(t);ok=true}catch(e){}
+  if(!ok){ // older browsers: select a hidden textarea and copy
+    const ta=document.createElement('textarea');ta.value=t;ta.setAttribute('readonly','');ta.style.cssText='position:fixed;top:0;left:0;opacity:0';
+    document.body.appendChild(ta);ta.select();ta.setSelectionRange(0,t.length);try{ok=document.execCommand('copy')}catch(e){}ta.remove();
+  }
+  if(ok){const n=cards().length;b.textContent=`Copied ${n} word${n>1?'s':''} ✓`;b.classList.add('done');setTimeout(()=>{b.textContent='Copy all words';b.classList.remove('done')},2500)}
+  else{ // last resort: show the text so it can be selected by hand
+    let f=document.getElementById('fb');if(!f){f=document.createElement('textarea');f.id='fb';f.className='fallback';$('#tools').appendChild(f)}
+    f.value=t;f.focus();f.select();b.textContent='Select the text below and copy it';
+  }
+}
+document.addEventListener('click',e=>{
+  const t=e.target;
+  const f=t.closest('[data-fmt]');if(f){fmt=f.dataset.fmt;put('ll-cards-fmt',fmt);render();return}
+  if(t.closest('#ex')){withEx=!withEx;put('ll-cards-ex',withEx);render();return}
+  if(t.closest('#copy')){copy();return}
+  const rm=t.closest('[data-rm]');if(rm){const [slug,k]=rm.dataset.rm.split('|');const s=get(slug+'-saved',{});delete s[k];put(slug+'-saved',s);
+    const c=get(slug+'-savedctx',{});delete c[k];put(slug+'-savedctx',c);
+    for(const g of GROUPS)if(g.slug===slug)g.words=g.words.filter(w=>w.k!==k);GROUPS=GROUPS.filter(g=>g.words.length);render()}
+});
+load().then(render).catch(()=>{$('#out').innerHTML='<p class="none">Your words could not be loaded. Check your connection and try again.</p>'});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>

@@ -270,7 +270,7 @@ function mark(){document.querySelectorAll('.w').forEach(e=>e.classList.toggle('s
 function showList(){
   close();const ks=Object.keys(saved);
   $('#card').innerHTML=`<div class="row"><div class="wd">Mes mots</div><button class="x" data-x aria-label="Fermer">×</button></div>`+
-   (ks.length?`<ul class="list">${ks.map(k=>`<li><div><b${canSpeak()?` class="sayw" data-say="${esc(saved[k])}"`:''}>${esc(saved[k])}</b><span>${esc((DICT[k]||[''])[0])}</span></div><button class="x" data-rm="${esc(k)}" aria-label="Retirer">−</button></li>`).join('')}</ul>`:'<p class="empty">No saved words yet. Tap a word in the text, then press Save. Tap a saved word to hear it.</p>');
+   (ks.length?`<ul class="list">${ks.map(k=>`<li><div><b${canSpeak()?` class="sayw" data-say="${esc(saved[k])}"`:''}>${esc(saved[k])}</b><span>${esc((DICT[k]||[''])[0])}</span></div><button class="x" data-rm="${esc(k)}" aria-label="Retirer">−</button></li>`).join('')}</ul>`:'<p class="empty">No saved words yet. Tap a word in the text, then press Save. Tap a saved word to hear it.</p>')+'<p class="allw"><a href="words.html">All my words, and copy for flashcards →</a></p>';
   $('#sheet').classList.add('open');
 }
 function bind(){
@@ -293,8 +293,8 @@ function bind(){
     if(t.closest('[data-close]')){unread();return}
     if(t.closest('[data-x]')){close();return}
     if(t.closest('[data-tr]')){sel.showTr=!sel.showTr;draw();return}
-    if(t.closest('[data-star]')){if(saved[sel.w])delete saved[sel.w];else saved[sel.w]=sel.shown.toLowerCase();store.set('saved',saved);count();mark();draw();return}
-    const rm=t.closest('[data-rm]');if(rm){delete saved[rm.dataset.rm];store.set('saved',saved);count();mark();showList();if($('#reader').hidden)home();return}
+    if(t.closest('[data-star]')){const ctx=store.get('savedctx',{});if(saved[sel.w]){delete saved[sel.w];delete ctx[sel.w]}else{saved[sel.w]=sel.shown.toLowerCase();ctx[sel.w]=sel.sid}store.set('saved',saved);store.set('savedctx',ctx);count();mark();draw();return}
+    const rm=t.closest('[data-rm]');if(rm){const cx=store.get('savedctx',{});delete cx[rm.dataset.rm];store.set('savedctx',cx);delete saved[rm.dataset.rm];store.set('saved',saved);count();mark();showList();if($('#reader').hidden)home();return}
     if(t.closest('#mots')||t.closest('[data-list]')){showList();return}
     if(!t.closest('#sheet'))close();
   });
