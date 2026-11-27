@@ -17,6 +17,9 @@ PAUSE = float(os.environ.get('TTS_PAUSE', '6'))  # seconds between calls, to sta
 SENTENCE_PROMPT = ("Read the following French text aloud in a clear, natural voice with a standard "
                    "France French accent, at a slightly slow pace for a language learner. "
                    "Read only the text:\n\n{t}")
+# Gemini 3.8 TTS reads its text verbatim, so delivery notes go in speech_metadata.style instead
+SENTENCE_STYLE = "clear, natural and warm, slightly slow, for a language learner"
+WORD_STYLE = "clear and careful, like a dictionary pronunciation of one word"
 WORD_PROMPT = ("Say this single French word clearly, with a standard France French accent, "
                "as a dictionary would. Say only the word:\n\n{t}")
 
@@ -31,15 +34,25 @@ TASTER_WORDS = ["destin", "rivière", "écureuil", "grenouille", "feuille",
                 "surveillait", "aujourd'hui", "œuf", "heureux", "brûlé"]
 
 
-def synth(model, prompt):
+def is_38(model):
+    return '3.8' in model or model.startswith('gemini-4')
+
+
+def request_body(model, text, kind):
+    """3.8+: verbatim text plus speech_metadata.style. Older: one prompt with the directions inline."""
+    if is_38(model):
+        part = {'text': text, 'speech_metadata': {'style': SENTENCE_STYLE if kind == 'sentence' else WORD_STYLE}}
+        voice = {'voice': VOICE}
+    else:
+        part = {'text': (SENTENCE_PROMPT if kind == 'sentence' else WORD_PROMPT).format(t=text)}
+        voice = {'prebuiltVoiceConfig': {'voiceName': VOICE}}
+    return {'contents': [{'role': 'user', 'parts': [part]}],
+            'generationConfig': {'responseModalities': ['AUDIO'], 'speechConfig': {'voiceConfig': voice}}}
+
+
+def synth(model, text, kind):
     url = f'https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent'
-    body = json.dumps({
-        'contents': [{'parts': [{'text': prompt}]}],
-        'generationConfig': {
-            'responseModalities': ['AUDIO'],
-            'speechConfig': {'voiceConfig': {'prebuiltVoiceConfig': {'voiceName': VOICE}}},
-        },
-    }).encode()
+    body = json.dumps(request_body(model, text, kind)).encode()
     for attempt in range(5):
         req = urllib.request.Request(url, body, {'Content-Type': 'application/json', 'x-goog-api-key': KEY})
         try:
@@ -92,13 +105,15 @@ def taster():
     for model in MODELS:
         print(f'== {model} ({VOICE})', flush=True)
         for it in items:
-            prompt = (SENTENCE_PROMPT if it['kind'] == 'sentence' else WORD_PROMPT).format(t=it['text'])
             rel = f"audio/taster/{model}/{it['id']}.mp3"
             try:
-                audio, mime = synth(model, prompt)
+                audio, mime = synth(model, it['text'], it['kind'])
                 to_mp3(audio, mime, os.path.join(ROOT, rel))
                 it['files'][model] = rel
-                print(f"  ok  {it['text'][:50]}", flush=True)
+                secs = float(subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0',
+                                             os.path.join(ROOT, rel)], capture_output=True, text=True).stdout or 0)
+                flag = '  <-- long, check it' if (it['kind'] == 'word' and secs > 3) or secs > len(it['text']) * 0.12 + 3 else ''
+                print(f"  ok  {secs:5.1f}s  {it['text'][:50]}{flag}", flush=True)
             except Exception as e:
                 errors.setdefault(model, str(e))
                 print(f"  ERR {it['text'][:50]}: {e}", flush=True)
