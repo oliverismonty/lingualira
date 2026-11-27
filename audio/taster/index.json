@@ -1,0 +1,146 @@
+{
+ "voice": "Iapetus",
+ "models": [
+  "gemini-3.8-flash-tts",
+  "gemini-3.1-flash-tts-preview"
+ ],
+ "items": [
+  {
+   "id": "s1",
+   "kind": "sentence",
+   "text": "C'était une de ces jolies jeunes femmes qui semblent être nées, par une erreur du destin, dans une famille modeste.",
+   "files": {
+    "gemini-3.8-flash-tts": "audio/taster/gemini-3.8-flash-tts/s1.mp3",
+    "gemini-3.1-flash-tts-preview": "audio/taster/gemini-3.1-flash-tts-preview/s1.mp3"
+   }
+  },
+  {
+   "id": "s2",
+   "kind": "sentence",
+   "text": "Quel étrange voyage ! Il avait pourtant si bien commencé.",
+   "files": {
+    "gemini-3.8-flash-tts": "audio/taster/gemini-3.8-flash-tts/s2.mp3",
+    "gemini-3.1-flash-tts-preview": "audio/taster/gemini-3.1-flash-tts-preview/s2.mp3"
+   }
+  },
+  {
+   "id": "s3",
+   "kind": "sentence",
+   "text": "J'ai pris la carafe : elle était vide ! Elle était complètement vide !",
+   "files": {
+    "gemini-3.8-flash-tts": "audio/taster/gemini-3.8-flash-tts/s3.mp3",
+    "gemini-3.1-flash-tts-preview": "audio/taster/gemini-3.1-flash-tts-preview/s3.mp3"
+   }
+  },
+  {
+   "id": "s4",
+   "kind": "sentence",
+   "text": "« Tu dis que tu as acheté une rivière de diamants pour remplacer la mienne ? »",
+   "files": {
+    "gemini-3.8-flash-tts": "audio/taster/gemini-3.8-flash-tts/s4.mp3",
+    "gemini-3.1-flash-tts-preview": "audio/taster/gemini-3.1-flash-tts-preview/s4.mp3"
+   }
+  },
+  {
+   "id": "s5",
+   "kind": "sentence",
+   "text": "Si elle me l'avait demandé, je lui aurais tout avoué.",
+   "files": {
+    "gemini-3.8-flash-tts": "audio/taster/gemini-3.8-flash-tts/s5.mp3",
+    "gemini-3.1-flash-tts-preview": "audio/taster/gemini-3.1-flash-tts-preview/s5.mp3"
+   }
+  },
+  {
+   "id": "w-destin",
+   "kind": "word",
+   "text": "destin",
+   "files": {
+    "gemini-3.8-flash-tts": "audio/taster/gemini-3.8-flash-tts/w-destin.mp3",
+    "gemini-3.1-flash-tts-preview": "audio/taster/gemini-3.1-flash-tts-preview/w-destin.mp3"
+   }
+  },
+  {
+   "id": "w-rivière",
+   "kind": "word",
+   "text": "rivière",
+   "files": {
+    "gemini-3.8-flash-tts": "audio/taster/gemini-3.8-flash-tts/w-rivière.mp3",
+    "gemini-3.1-flash-tts-preview": "audio/taster/gemini-3.1-flash-tts-preview/w-rivière.mp3"
+   }
+  },
+  {
+   "id": "w-écureuil",
+   "kind": "word",
+   "text": "écureuil",
+   "files": {
+    "gemini-3.8-flash-tts": "audio/taster/gemini-3.8-flash-tts/w-écureuil.mp3",
+    "gemini-3.1-flash-tts-preview": "audio/taster/gemini-3.1-flash-tts-preview/w-écureuil.mp3"
+   }
+  },
+  {
+   "id": "w-grenouille",
+   "kind": "word",
+   "text": "grenouille",
+   "files": {
+    "gemini-3.8-flash-tts": "audio/taster/gemini-3.8-flash-tts/w-grenouille.mp3",
+    "gemini-3.1-flash-tts-preview": "audio/taster/gemini-3.1-flash-tts-preview/w-grenouille.mp3"
+   }
+  },
+  {
+   "id": "w-feuille",
+   "kind": "word",
+   "text": "feuille",
+   "files": {
+    "gemini-3.8-flash-tts": "audio/taster/gemini-3.8-flash-tts/w-feuille.mp3",
+    "gemini-3.1-flash-tts-preview": "audio/taster/gemini-3.1-flash-tts-preview/w-feuille.mp3"
+   }
+  },
+  {
+   "id": "w-surveillait",
+   "kind": "word",
+   "text": "surveillait",
+   "files": {
+    "gemini-3.8-flash-tts": "audio/taster/gemini-3.8-flash-tts/w-surveillait.mp3",
+    "gemini-3.1-flash-tts-preview": "audio/taster/gemini-3.1-flash-tts-preview/w-surveillait.mp3"
+   }
+  },
+  {
+   "id": "w-aujourd_hui",
+   "kind": "word",
+   "text": "aujourd'hui",
+   "files": {
+    "gemini-3.8-flash-tts": "audio/taster/gemini-3.8-flash-tts/w-aujourd_hui.mp3",
+    "gemini-3.1-flash-tts-preview": "audio/taster/gemini-3.1-flash-tts-preview/w-aujourd_hui.mp3"
+   }
+  },
+  {
+   "id": "w-œuf",
+   "kind": "word",
+   "text": "œuf",
+   "files": {
+    "gemini-3.8-flash-tts": "audio/taster/gemini-3.8-flash-tts/w-œuf.mp3",
+    "gemini-3.1-flash-tts-preview": "audio/taster/gemini-3.1-flash-tts-preview/w-œuf.mp3"
+   }
+  },
+  {
+   "id": "w-heureux",
+   "kind": "word",
+   "text": "heureux",
+   "files": {
+    "gemini-3.8-flash-tts": "audio/taster/gemini-3.8-flash-tts/w-heureux.mp3",
+    "gemini-3.1-flash-tts-preview": "audio/taster/gemini-3.1-flash-tts-preview/w-heureux.mp3"
+   }
+  },
+  {
+   "id": "w-brûlé",
+   "kind": "word",
+   "text": "brûlé",
+   "files": {
+    "gemini-3.8-flash-tts": "audio/taster/gemini-3.8-flash-tts/w-brûlé.mp3",
+    "gemini-3.1-flash-tts-preview": "audio/taster/gemini-3.1-flash-tts-preview/w-brûlé.mp3"
+   }
+  }
+ ],
+ "errors": {},
+ "made": "2026-11-27 10:27 UTC"
+}
