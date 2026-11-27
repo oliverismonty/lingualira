@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 200" preserveAspectRatio="xMidYMid slice">
+ <rect width="420" height="200" fill="#1d1d1f"/>
+ <!-- the shed: glass roof -->
+ <g fill="none" stroke="#f2f0eb" stroke-width="1.4" stroke-linejoin="round">
+  <path d="M60 178 V104 L210 62 L360 104 V178"/>
+  <path d="M60 104 L360 104" stroke-width=".8" opacity=".5"/>
+  <path d="M100 93 L100 104M140 82 L140 104M180 70 L180 104M240 70 L240 104M280 82 L280 104M320 93 L320 104" stroke-width=".7" opacity=".45"/>
+ </g>
+ <!-- shelf with glowing tubes -->
+ <path d="M110 150 H310" stroke="#f2f0eb" stroke-width="1.4"/>
+ <g fill="none" stroke="#f2f0eb" stroke-width="1.2">
+  <path d="M132 150 V124 a4 4 0 0 1 8 0 V150"/><path d="M172 150 V116 a4 4 0 0 1 8 0 V150"/>
+  <path d="M246 150 V120 a4 4 0 0 1 8 0 V150"/><path d="M282 150 V128 a4 4 0 0 1 8 0 V150"/>
+  <path d="M204 150 C 198 150 196 140 202 134 V118 h10 V134 C 218 140 216 150 210 150 Z"/>
+ </g>
+ <g fill="#f2f0eb" opacity=".18"><circle cx="136" cy="138" r="14"/><circle cx="176" cy="134" r="14"/><circle cx="250" cy="136" r="14"/><circle cx="286" cy="140" r="14"/></g>
+ <circle cx="207" cy="142" r="16" fill="#ff6a52" opacity=".28"/>
+ <path d="M200 144 C 202 138 212 138 214 144 C 214 148 200 148 200 144 Z" fill="#ff6a52"/>
+ <!-- stars through the glass roof -->
+ <g fill="#f2f0eb" opacity=".6"><circle cx="150" cy="40" r="1"/><circle cx="268" cy="30" r="1"/><circle cx="330" cy="54" r="1"/><circle cx="84" cy="62" r="1"/><circle cx="210" cy="24" r="1.2"/></g>
+ <path d="M30 178 H390" stroke="#f2f0eb" stroke-width="1" opacity=".5"/>
+</svg>
