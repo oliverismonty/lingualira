@@ -10,7 +10,13 @@ on:
         default: Iapetus
       models:
         description: Models to compare (comma separated)
-        default: gemini-3.8-flash-tts,gemini-3.1-flash-tts-preview
+        default: gemini-3.8-flash-tts
+      sentences:
+        description: How many sample sentences
+        default: "2"
+      words:
+        description: How many sample words
+        default: "2"
 
 permissions:
   contents: write
@@ -28,6 +34,8 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           TTS_VOICE: ${{ inputs.voice }}
           TTS_MODELS: ${{ inputs.models }}
+          TTS_SENTENCES: ${{ inputs.sentences }}
+          TTS_WORDS: ${{ inputs.words }}
         run: python3 tools/tts.py taster
       - name: Publish samples
         run: |

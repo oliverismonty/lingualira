@@ -11,14 +11,15 @@ import base64, json, os, re, subprocess, sys, tempfile, time, urllib.error, urll
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 KEY = os.environ.get('GEMINI_API_KEY', '').strip()
 VOICE = os.environ.get('TTS_VOICE', 'Iapetus')
-MODELS = [m for m in os.environ.get('TTS_MODELS', 'gemini-3.8-flash-tts,gemini-3.1-flash-tts-preview').split(',') if m]
+MODELS = [m.strip() for m in os.environ.get('TTS_MODELS', 'gemini-3.8-flash-tts').split(',') if m.strip()]
 PAUSE = float(os.environ.get('TTS_PAUSE', '6'))  # seconds between calls, to stay under free-tier rate limits
 
 SENTENCE_PROMPT = ("Read the following French text aloud in a clear, natural voice with a standard "
                    "France French accent, at a slightly slow pace for a language learner. "
                    "Read only the text:\n\n{t}")
 # Gemini 3.8 TTS reads its text verbatim, so delivery notes go in speech_metadata.style instead
-SENTENCE_STYLE = "clear, natural and warm, slightly slow, for a language learner"
+SENTENCE_STYLE = ("natural, expressive storytelling at a normal pace, like an audiobook narrator "
+                  "reading a French novel aloud, with the rhythm and emotion of the scene")
 WORD_STYLE = "clear and careful, like a dictionary pronunciation of one word"
 WORD_PROMPT = ("Say this single French word clearly, with a standard France French accent, "
                "as a dictionary would. Say only the word:\n\n{t}")
@@ -97,8 +98,10 @@ def slug(text):
 
 def taster():
     outdir = os.path.join(ROOT, 'audio', 'taster')
-    items = [{'id': f's{i+1}', 'kind': 'sentence', 'text': t} for i, t in enumerate(TASTER_SENTENCES)]
-    items += [{'id': 'w-' + slug(w), 'kind': 'word', 'text': w} for w in TASTER_WORDS]
+    ns = int(os.environ.get('TTS_SENTENCES') or len(TASTER_SENTENCES))
+    nw = int(os.environ.get('TTS_WORDS') or len(TASTER_WORDS))
+    items = [{'id': f's{i+1}', 'kind': 'sentence', 'text': t} for i, t in enumerate(TASTER_SENTENCES[:ns])]
+    items += [{'id': 'w-' + slug(w), 'kind': 'word', 'text': w} for w in TASTER_WORDS[:nw]]
     for it in items:
         it['files'] = {}
     errors = {}
