@@ -45,6 +45,8 @@ fetch('books/index.json').then(r=>r.json()).then(books=>{
   }).join('');
 }).catch(()=>{document.getElementById('shelf').innerHTML='<p class="err">The book list could not be loaded. Check your connection and try again.</p>'});
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+// ask the browser to keep this app's saved words and progress even when the phone is low on space
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persisted().then(p=>p||navigator.storage.persist()).catch(()=>{})}catch(e){}
 }
 </script>
 </body>

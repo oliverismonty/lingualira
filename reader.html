@@ -319,6 +319,8 @@ fetch('books/'+encodeURIComponent(slug)+'.json').then(r=>{if(!r.ok)throw 0;retur
   $('#voice').addEventListener('change',e=>{const v=frVoices[+e.target.value];if(!v)return;voice=v;try{localStorage.setItem('ll-voice',v.voiceURI||v.name)}catch(_){}say('Bonjour ! Voici ma voix.',.95)});count();home();
 }).catch(()=>{$('#main').innerHTML='<p class="err">This book could not be found. <a href="./">Back to the library</a></p>';$('#start').hidden=true});
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+// ask the browser to keep this app's saved words and progress even when the phone is low on space
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persisted().then(p=>p||navigator.storage.persist()).catch(()=>{})}catch(e){}
 }
 </script>
 </body>
