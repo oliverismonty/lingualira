@@ -1,0 +1,48 @@
+name: Book audio
+
+# Records every sentence and word of one book with Gemini TTS and publishes the
+# MP3s to the site. Needs the repository secret GEMINI_API_KEY. Safe to re-run:
+# anything already recorded is skipped, and progress is saved even if stopped.
+on:
+  workflow_dispatch:
+    inputs:
+      book:
+        description: "Book (micromegas, le-bal, arsene-lupin, la-parure, le-horla)"
+        default: le-horla
+      voice:
+        description: Gemini voice name
+        default: Iapetus
+      limit:
+        description: "Stop after this many new clips (0 = whole book)"
+        default: "0"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: book-audio
+  cancel-in-progress: false
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install ffmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - name: Record
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          TTS_VOICE: ${{ inputs.voice }}
+          TTS_LIMIT: ${{ inputs.limit }}
+        run: python3 tools/tts.py book "${{ inputs.book }}"
+      - name: Publish what was recorded
+        if: always()
+        run: |
+          python3 tools/tts.py index "${{ inputs.book }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add audio
+          git commit -q -m "Audio for ${{ inputs.book }} (${{ inputs.voice }})" || { echo "nothing new to publish"; exit 0; }
+          for i in 1 2 3; do git pull -q --rebase && git push -q && break; sleep 5; done

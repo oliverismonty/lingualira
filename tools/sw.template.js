@@ -8,6 +8,8 @@ self.addEventListener('activate', e => {
 // network first so new books show up straight away; the cache keeps it working offline
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
+  // let the browser stream recordings itself (range requests can't be cached here)
+  if (new URL(e.request.url).pathname.includes('/audio/')) return;
   e.respondWith(fetch(e.request).then(r => {
     const cp = r.clone(); caches.open(C).then(c => c.put(e.request, cp)); return r;
   }).catch(() => caches.match(e.request, { ignoreSearch: e.request.url.includes('reader.html') }).then(r => r || caches.match('./index.html'))));

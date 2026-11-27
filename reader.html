@@ -126,7 +126,19 @@ function fillVoices(){const s=document.getElementById('voice');if(!s)return;
   s.disabled=false;s.innerHTML=frVoices.map((v,i)=>`<option value="${i}"${v===voice?' selected':''}>${esc(vlabel(v))}</option>`).join('')}
 if(TTS){pickVoice();try{speechSynthesis.addEventListener('voiceschanged',pickVoice)}catch(e){speechSynthesis.onvoiceschanged=pickVoice}}
 function say(text,rate){if(!TTS||!text)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang=voice?voice.lang:'fr-FR';if(voice)u.voice=voice;u.rate=rate||1;speechSynthesis.speak(u)}catch(e){}}
-function hush(){if(TTS)try{speechSynthesis.cancel()}catch(e){}}
+function hush(){if(TTS)try{speechSynthesis.cancel()}catch(e){}try{player.pause()}catch(e){}}
+// Recorded audio (tools/tts.py): sentences per book, words shared by all books. Falls back to the device voice.
+const AUD={sent:new Set(),words:{}};
+const player=new Audio();player.preload='auto';
+function loadAudio(){
+  fetch('audio/'+encodeURIComponent(slug)+'/index.json').then(r=>r.ok?r.json():null).then(d=>{if(d&&Array.isArray(d.sentences))AUD.sent=new Set(d.sentences);canSpeakUI()}).catch(()=>{});
+  fetch('audio/words/index.json').then(r=>r.ok?r.json():null).then(d=>{if(d&&typeof d==='object')AUD.words=d;canSpeakUI()}).catch(()=>{});
+}
+const canSpeak=()=>TTS||AUD.sent.size>0||Object.keys(AUD.words).length>0;
+function canSpeakUI(){const row=document.getElementById('ttsrow');if(row)row.hidden=!canSpeak();if(sel)draw()}
+function play(url,fallback){hush();player.src=url;const p=player.play();if(p&&p.catch)p.catch(()=>fallback&&fallback())}
+function sayWord(text){const f=AUD.words[String(text).toLowerCase()];if(f)play('audio/words/'+encodeURIComponent(f),()=>say(text,.85));else say(text,.85)}
+function saySentence(id,text){if(AUD.sent.has(id))play('audio/'+encodeURIComponent(slug)+'/'+id+'.mp3',()=>say(text,.92));else say(text,.92)}
 let autoSay=(()=>{try{return localStorage.getItem('ll-say')!=='0'}catch(e){return true}})();
 function setAuto(v){autoSay=v;$('#auto').setAttribute('aria-checked',v?'true':'false');try{localStorage.setItem('ll-say',v?'1':'0')}catch(e){}}
 // say an elided word with the word it joins: l' + homme
@@ -160,19 +172,19 @@ function open(wEl){
   const sEl=wEl.closest('.s');wEl.classList.add('on');sEl.classList.add('on');
   const [pi,si]=sEl.dataset.s.split('-').map(Number);
   const S=BOOK[PAGES[pg].c].p[pi][si];
-  sel={w:wEl.dataset.w,shown:wEl.textContent,say:wordText(wEl),fr:plain(S[0]),en:S[1],ph:phrasesFor(sEl,wEl),showTr:false};
+  sel={w:wEl.dataset.w,shown:wEl.textContent,say:wordText(wEl),sid:`${PAGES[pg].c}-${pi}-${si}`,fr:plain(S[0]),en:S[1],ph:phrasesFor(sEl,wEl),showTr:false};
   draw();$('#sheet').classList.add('open');
-  if(autoSay)say(sel.say,.85);
+  if(autoSay)sayWord(sel.say);
   requestAnimationFrame(()=>{const pe=$('#page');pe.style.transform='';const r=wEl.getBoundingClientRect(),lim=innerHeight-$('#card').offsetHeight-16;if(r.bottom>lim)pe.style.transform=`translateY(${Math.round(lim-r.bottom-12)}px)`});
 }
 function draw(){
   if(!sel)return;
   const d=DICT[sel.w]||['',''],isS=!!saved[sel.w];
-  $('#card').innerHTML=`<div class="row">${TTS?`<button class="wd wdb" data-say-w aria-label="Écouter le mot">${esc(sel.shown)}<span class="spk">${SPK}</span></button>`:`<div class="wd">${esc(sel.shown)}</div>`}<button class="x" data-x aria-label="Fermer">×</button></div>
+  $('#card').innerHTML=`<div class="row">${canSpeak()?`<button class="wd wdb" data-say-w aria-label="Écouter le mot">${esc(sel.shown)}<span class="spk">${SPK}</span></button>`:`<div class="wd">${esc(sel.shown)}</div>`}<button class="x" data-x aria-label="Fermer">×</button></div>
    <p class="gl">${esc(d[0])}</p>${d[1]?`<p class="nt">${esc(d[1])}</p>`:''}
    ${sel.ph.map(([p,g])=>`<p class="ph"><b>${esc(fmtP(p))}</b> = ${esc(g)}</p>`).join('')}
    ${sel.showTr?`<p class="tr">${esc(sel.en)}</p>`:''}
-   <div class="acts">${TTS?`<button class="say" data-say-s>${SPK}Écouter</button>`:''}<button data-tr>${sel.showTr?'Hide English':'English'}</button><button class="star ${isS?'on':''}" data-star>${isS?'★ Saved':'☆ Save'}</button></div>`;
+   <div class="acts">${canSpeak()?`<button class="say" data-say-s>${SPK}Écouter</button>`:''}<button data-tr>${sel.showTr?'Hide English':'English'}</button><button class="star ${isS?'on':''}" data-star>${isS?'★ Saved':'☆ Save'}</button></div>`;
 }
 function close(){hush();$('#sheet').classList.remove('open');const pe=$('#page');if(pe)pe.style.transform='';document.querySelectorAll('.w.on,.s.on').forEach(e=>e.classList.remove('on'));sel=null}
 function count(){$('#mots').textContent='Mes mots · '+Object.keys(saved).length}
@@ -180,7 +192,7 @@ function mark(){document.querySelectorAll('.w').forEach(e=>e.classList.toggle('s
 function showList(){
   close();const ks=Object.keys(saved);
   $('#card').innerHTML=`<div class="row"><div class="wd">Mes mots</div><button class="x" data-x aria-label="Fermer">×</button></div>`+
-   (ks.length?`<ul class="list">${ks.map(k=>`<li><div><b${TTS?` class="sayw" data-say="${esc(saved[k])}"`:''}>${esc(saved[k])}</b><span>${esc((DICT[k]||[''])[0])}</span></div><button class="x" data-rm="${esc(k)}" aria-label="Retirer">−</button></li>`).join('')}</ul>`:'<p class="empty">No saved words yet. Tap a word in the text, then press Save. Tap a saved word to hear it.</p>');
+   (ks.length?`<ul class="list">${ks.map(k=>`<li><div><b${canSpeak()?` class="sayw" data-say="${esc(saved[k])}"`:''}>${esc(saved[k])}</b><span>${esc((DICT[k]||[''])[0])}</span></div><button class="x" data-rm="${esc(k)}" aria-label="Retirer">−</button></li>`).join('')}</ul>`:'<p class="empty">No saved words yet. Tap a word in the text, then press Save. Tap a saved word to hear it.</p>');
   $('#sheet').classList.add('open');
 }
 function bind(){
@@ -194,9 +206,9 @@ function bind(){
     if(t.closest('#auto')){setAuto(!autoSay);return}
     if(t.closest('#menu'))return;
     if(!$('#menu').hidden){menu(false);return}
-    if(t.closest('[data-say-s]')){say(sel.fr,.92);return}
-    if(t.closest('[data-say-w]')){say(sel.say,.85);return}
-    const sy=t.closest('[data-say]');if(sy){say(sy.dataset.say,.85);return}
+    if(t.closest('[data-say-s]')){saySentence(sel.sid,sel.fr);return}
+    if(t.closest('[data-say-w]')){sayWord(sel.say);return}
+    const sy=t.closest('[data-say]');if(sy){sayWord(sy.dataset.say);return}
     if(t.closest('[data-prev]')){turn(-1);return}
     if(t.closest('[data-next]')){turn(1);return}
     if(t.closest('[data-close]')){unread();return}
@@ -224,7 +236,7 @@ fetch('books/'+encodeURIComponent(slug)+'.json').then(r=>{if(!r.ok)throw 0;retur
   $('#author').textContent=`${B.author}, ${B.year}`;
   $('#meta').textContent=`${B.level} · ${B.chapters} chapitres · ${B.words.toLocaleString('en-GB')} mots · ~${Math.round(B.words/55/5)*5} min`;
   $('#cover').src='books/'+encodeURIComponent(slug)+'.svg';
-  bind();applySize();setAuto(autoSay);if(!TTS){$('#ttsrow').hidden=true;$('#voicerow').hidden=true}
+  bind();applySize();setAuto(autoSay);if(!TTS){$('#ttsrow').hidden=true;$('#voicerow').hidden=true}loadAudio();
   $('#voice').addEventListener('change',e=>{const v=frVoices[+e.target.value];if(!v)return;voice=v;try{localStorage.setItem('ll-voice',v.voiceURI||v.name)}catch(_){}say('Bonjour ! Voici ma voix.',.95)});count();home();
 }).catch(()=>{$('#main').innerHTML='<p class="err">This book could not be found. <a href="./">Back to the library</a></p>';$('#start').hidden=true});
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
