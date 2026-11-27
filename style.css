@@ -92,13 +92,17 @@ button:focus-visible,a:focus-visible,.w:focus-visible{outline:2px solid var(--ac
 .w.sv{text-decoration:underline solid var(--acc);text-decoration-thickness:2px}
 .w.on{background:var(--acc);color:#fff;text-decoration:none}
 .s.on{background:linear-gradient(transparent 62%,var(--hl) 62%)}
-.rbot{display:flex;justify-content:center;align-items:center;gap:28px;padding:10px 0 22px}
-.nav{width:72px;height:72px;border:0;border-radius:14px;background:var(--soft);color:var(--ink);font-size:30px}
+.rbot{display:flex;justify-content:center;align-items:center;gap:28px;padding:10px 0 40px}
+.nav{width:72px;height:72px;border:0;border-radius:14px;background:var(--soft);color:var(--ink);display:flex;align-items:center;justify-content:center;padding:0}
+.nav svg{width:30px;height:30px}
 .nav:disabled{opacity:.3}
-.mid{display:flex;flex-direction:column;align-items:center;gap:8px}
-.mid .cnt{font-size:14px;min-width:0}
+/* play button centred on the arrow boxes; page count hangs just below their bottom edge */
+.mid{position:relative;display:flex;align-items:center;justify-content:center;width:72px;height:72px}
+.mid .cnt{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);font-size:14px;min-width:0}
+.nav.listen{width:60px;height:60px}
 .listen{display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--btn);color:var(--btnink)}
-.listen svg{width:26px;height:26px}
+.listen svg{width:22px;height:22px;margin-left:2px}
+.listen.on svg{margin-left:0}
 .listen.on{background:var(--acc);color:#fff}
 .listen[hidden]{display:none}
 .s.rd{background:linear-gradient(transparent 62%,var(--hl) 62%)}
