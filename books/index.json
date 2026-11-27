@@ -1,5 +1,16 @@
 [
  {
+  "slug": "tour-du-monde",
+  "title": "Le Tour du monde en quatre-vingts jours",
+  "author": "Jules Verne",
+  "year": 1872,
+  "blurb": "A bet at a London club, a French valet, a detective in pursuit, an elephant across India, a ship burned plank by plank, and one day that nobody counted.",
+  "level": "B1+ grammar (passé simple) · adventure",
+  "added": "2026-11-27T18",
+  "words": 1816,
+  "chapters": 9
+ },
+ {
   "slug": "lettres-persanes",
   "title": "Lettres persanes",
   "author": "Montesquieu",

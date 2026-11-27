@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 200" preserveAspectRatio="xMidYMid slice">
+ <rect width="420" height="200" fill="#1d1d1f"/>
+ <!-- globe with meridians and a route -->
+ <g transform="translate(150 104)" fill="none" stroke="#f2f0eb">
+  <circle r="74" stroke-width="1.5"/>
+  <ellipse rx="28" ry="74" stroke-width=".8" opacity=".5"/><ellipse rx="56" ry="74" stroke-width=".8" opacity=".5"/>
+  <path d="M-74 0 H74M-66 -34 H66M-66 34 H66" stroke-width=".8" opacity=".5"/>
+  <path d="M-52 -30 C -20 -10 10 10 30 4 S 66 -20 74 -6" stroke="#ff6a52" stroke-width="1.6" stroke-dasharray="4 4"/>
+ </g>
+ <!-- pocket watch -->
+ <g transform="translate(320 104)" fill="none" stroke="#f2f0eb" stroke-width="1.5">
+  <circle r="40"/><circle r="34" stroke-width=".7" opacity=".5"/>
+  <path d="M0 -40 V-52M-6 -56 H6"/><circle cy="-56" r="3"/>
+  <path d="M0 0 V-24M0 0 L16 8" stroke-width="2"/>
+  <g stroke-width="1"><path d="M0 -34 V-29M0 34 V29M-34 0 H-29M34 0 H29"/></g>
+  <circle r="2.5" fill="#f2f0eb"/>
+ </g>
+</svg>
